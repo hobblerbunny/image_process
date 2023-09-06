@@ -8,6 +8,8 @@ packages = [{include = "estudo_cnn"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+opencv-python = "^4.8.0.76"
+ipykernel = "^6.25.2"
 
 
 [build-system]
