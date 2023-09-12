@@ -12,8 +12,7 @@ class ReadFrameOpencv:
         return self._video_file
 
     @video_file.setter
-    def video_file(self, path):
-        self._video_file = path
+    def video_file(self, path):new_frame_color = video_reader.matrix_color(frames, "RGB>GRAY")
 
     @property
     def output_folder(self):
@@ -44,15 +43,10 @@ class ReadFrameOpencv:
         if self.output_folder is None:
             raise ValueError("Output folder path is not set.")
         
-        os.makedirs(self.output_folder, exist_ok=True)
-
-        imagem = frames[0]
-        # imagem = cv2.imread(frame)
-        high, width, chann = imagem.shape
-        print(high, width, chann)
+        os.makedirs(f"saves/{self.output_folder}", exist_ok=True)
 
         for i, frame in enumerate(frames):
-            frame_filename = os.path.join(self.output_folder, f'frame_{i:04d}.jpg')
+            frame_filename = os.path.join(f"saves/{self.output_folder}", f'frame_{i:04d}.jpg')
             cv2.imwrite(frame_filename, frame)
 
     def matrix_color(self, frames, type):
@@ -70,20 +64,27 @@ class ReadFrameOpencv:
 
         return new_frame_list
 
-    def slicing_frames(frames):
-        num_colunas = 4
-        num_linhas = 4
-
-        altura, largura, _ = frames[0].shape
-        altura_parte = altura // num_linhas
-        largura_parte = largura // num_colunas
+    def slicing_frames(self, frames, num_colunas=None, num_linhas=None):
+        if num_colunas is None:
+            raise ("Value error: num_columns can't be none")
+        elif num_linhas is None:
+            raise ("Value error: num_linhas can't be none")
 
         for i, frame in enumerate(frames):
             frame_id = f"sliced_frame_{i:04d}.jpg"
-            frame_dir = make.os.dir(frame_id, exist_ok=True)
-            partes = np.array(np.split(np.split(frame, num_colunas, axis=1), num_linhas, axis=0))
+            os.makedirs(f"saves_sliced", exist_ok=True)
 
+            partes = np.array_split(frame, num_colunas, axis=1)
+            for parte in partes:
+                h_partes = np.array_split(parte, num_linhas, axis=0)
+                partes = partes + h_partes
+            # partes = np.hsplit(frame, num_linhas)
+            # for parte in partes:
+            #     partes = np.vsplit(parte, num_colunas)
+            partes = partes[num_colunas:]
             for i, parte in enumerate(partes):
                 slice_id = f"slice_{i:03d}.jpg"
-                make.os.dir(f"{frame_id}/{slice_id}", exist_ok=True)
-                cv2.imwrite(caminho_arquivo, parte)
+                caminho_arquivo = f"{frame_id}/{slice_id}"
+                os.makedirs(f"saves_sliced/{caminho_arquivo}", exist_ok=True)
+                frame_filename = os.path.join(f"saves_sliced/{caminho_arquivo}", f'slice_{i:04d}.jpg')
+                cv2.imwrite(frame_filename, parte)
