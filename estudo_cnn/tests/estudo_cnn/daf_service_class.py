@@ -2,6 +2,13 @@ import os
 import cv2
 import numpy as np
 
+"""
+mais opções de slicing, tipo uma que dividi a imagem em
+1/3/1 
+parametros: se o cara colocar 1 número slicing normal, se 
+colocar mais de 1, outro slicing
+"""
+
 class ReadFrameOpencv:
     def __init__(self):
         self._video_file = None
