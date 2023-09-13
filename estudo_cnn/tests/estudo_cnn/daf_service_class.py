@@ -6,13 +6,15 @@ class ReadFrameOpencv:
     def __init__(self):
         self._video_file = None
         self._output_folder = None
+        self._image_file = None
 
     @property
     def video_file(self):
         return self._video_file
 
     @video_file.setter
-    def video_file(self, path):new_frame_color = video_reader.matrix_color(frames, "RGB>GRAY")
+    def video_file(self, path):
+        self._video_file = file
 
     @property
     def output_folder(self):
@@ -44,7 +46,7 @@ class ReadFrameOpencv:
             if self.output_folder is None:
                 raise ValueError("Output folder path is not set.")
             
-            os.makedirs(f"saves/{self.output_folder}", exist_ok=True)
+            os.makedirs(f"{self.output_folder}", exist_ok=True)
 
             for i, frame in enumerate(frames):
                 frame_filename = os.path.join(f"{self.output_folder}", f'frame_{i:04d}.jpg')
