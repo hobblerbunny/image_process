@@ -6,7 +6,15 @@ class ReadFrameOpencv:
     def __init__(self):
         self._video_file = None
         self._output_folder = None
-        self._image_file = None
+        self._image_folder = None
+
+    @property
+    def image_folder(self):
+        return self._image_folder
+
+    @image_folder.setter
+    def image_folder(self, path):
+        self._image_folder = path
 
     @property
     def video_file(self):
@@ -28,14 +36,29 @@ class ReadFrameOpencv:
         if self.video_file is None:
             raise ValueError("Video file path is ncot set.")
         
-        cap = cv2.VideoCapture(self.video_file)
-        frames_list = []
-        
-        while True:
-            ret, frame = cap.read()
-            if not ret:
-                break
-            frames_list.append(frame)
+        try:
+            cap = cv2.VideoCapture(self.video_file)
+        except:
+            raise ValueError("Not a video")
+
+        try:
+            file = os.listdir(self.image_folder)
+        except:
+            raise ValueError("Not a video")
+
+        if cap:
+            frames_list = []
+            while True:
+                ret, frame = cap.read()
+                if not ret:
+                    break
+                frames_list.append(frame)
+
+        elif file:
+            frames_list = []
+            for filename in file:
+                img = cv2.imread(os.path.join(self.image_folder, filename))
+                frames_list.append(img)
 
         cap.release()  # Importante liberar o recurso de captura após a leitura
         
