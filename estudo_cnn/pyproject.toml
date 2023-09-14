@@ -12,6 +12,7 @@ opencv-python = "^4.8.0.76"
 ipykernel = "^6.25.2"
 importlib = "^1.0.4"
 matplotlib = "^3.7.3"
+pandas = "^2.1.0"
 
 
 [build-system]

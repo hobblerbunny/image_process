@@ -1,12 +1,17 @@
 import os
 import cv2
 import numpy as np
+import pandas as pd
 
 """
 mais opções de slicing, tipo uma que dividi a imagem em
 1/3/1 
 parametros: se o cara colocar 1 número slicing normal, se 
 colocar mais de 1, outro slicing
+///////////////////
+opção de salvar todos os frames em uma pasta só, all_in_one
+///////////////////
+precisa criar um csv com as landmarks CHW(chann, height, width)
 """
 
 class ReadFrameOpencv:
@@ -160,3 +165,10 @@ class ReadFrameOpencv:
             result.append(tuple_partes)
 
         return result
+
+    def landmarks(self, frames):
+        for frame in frames: 
+            height, width, channels = self.frame.shape
+
+
+        return frames
