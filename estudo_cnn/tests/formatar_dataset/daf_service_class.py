@@ -56,7 +56,7 @@ class ReadFrameOpencv:
         try:
             file = os.listdir(self.image_folder)
         except:
-            raise ValueError("Not a video")
+            raise ValueError("Not images")
 
         if cap:
             frames_list = []
@@ -66,18 +66,31 @@ class ReadFrameOpencv:
                     break
                 frames_list.append(frame)
 
+            cap.release()  # Importante liberar o recurso de captura após a leitura
+
         elif file:
             frames_list = []
             for filename in file:
                 img = cv2.imread(os.path.join(self.image_folder, filename))
                 frames_list.append(img)
 
-        cap.release()  # Importante liberar o recurso de captura após a leitura
+        
         
         return frames_list
 
-    def save_frames(self, frames):
-        if isinstance(frames[0], np.ndarray):
+    def save_frames(self, frames, all_in_one=False):
+        if all_in_one:
+            if self.output_folder is None:
+                raise ValueError("Output folder path is not set.")
+            
+            os.makedirs(f"{self.output_folder}", exist_ok=True)
+
+            for s, tuples in enumerate(frames):
+                for i, frame in enumerate(tuples):
+                    frame_filename = os.path.join(f"{self.output_folder}", f'frame_{s:04d}_{i}.jpg')
+                    cv2.imwrite(frame_filename, frame)
+
+        elif isinstance(frames[0], np.ndarray):
             if self.output_folder is None:
                 raise ValueError("Output folder path is not set.")
             
@@ -89,16 +102,21 @@ class ReadFrameOpencv:
         
         elif isinstance(frames[0], list):
             for i, tuples in enumerate(frames):
-                tuple_id = f"sliced_frame_{i:04d}.jpg"
-                os.makedirs(f"{self.output_folder}", exist_ok=True)
+                slice_id = f"slice_{i:03d}.jpg"
+                caminho_arquivo = f"{tuple_id}/{slice_id}"
+                os.makedirs(f"{self.output_folder}/{caminho_arquivo}", exist_ok=True)
+                frame_filename = os.path.join(f"{self.output_folder}/{caminho_arquivo}", f'slice_{i:04d}.jpg')
+                cv2.imwrite(frame_filename, frame)
+        
+        # elif isinstance(frames[0], np.ndarray):
+        #     if self.output_folder is None:
+        #         raise ValueError("Output folder path is not set.")
+            
+        #     os.makedirs(f"{self.output_folder}", exist_ok=True)
 
-                for i, frame in enumerate(tuples):
-                        slice_id = f"slice_{i:03d}.jpg"
-                        caminho_arquivo = f"{tuple_id}/{slice_id}"
-                        os.makedirs(f"{self.output_folder}/{caminho_arquivo}", exist_ok=True)
-                        frame_filename = os.path.join(f"{self.output_folder}/{caminho_arquivo}", f'slice_{i:04d}.jpg')
-                        
-                        cv2.imwrite(frame_filename, frame)
+        #     for i, frame in enumerate(frames):
+        #         frame_filename = os.path.join(f"{self.output_folder}", f'frame_{i:04d}.jpg')
+        #         cv2.imwrite(frame_filename, frame)
 
 
     def matrix_color(self, frames, type):
@@ -167,7 +185,7 @@ class ReadFrameOpencv:
         return result
 
     def landmarks(self, frames):
-        for frame in frames: 
+        for i, frame in enumerate(frames): 
             height, width, channels = self.frame.shape
 
 
