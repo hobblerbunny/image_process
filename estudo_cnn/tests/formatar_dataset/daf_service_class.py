@@ -107,17 +107,6 @@ class ReadFrameOpencv:
                 os.makedirs(f"{self.output_folder}/{caminho_arquivo}", exist_ok=True)
                 frame_filename = os.path.join(f"{self.output_folder}/{caminho_arquivo}", f'slice_{i:04d}.jpg')
                 cv2.imwrite(frame_filename, frame)
-        
-        # elif isinstance(frames[0], np.ndarray):
-        #     if self.output_folder is None:
-        #         raise ValueError("Output folder path is not set.")
-            
-        #     os.makedirs(f"{self.output_folder}", exist_ok=True)
-
-        #     for i, frame in enumerate(frames):
-        #         frame_filename = os.path.join(f"{self.output_folder}", f'frame_{i:04d}.jpg')
-        #         cv2.imwrite(frame_filename, frame)
-
 
     def matrix_color(self, frames, type):
         if type=="BGR>RGB":
@@ -173,9 +162,9 @@ class ReadFrameOpencv:
             frame_id = f"sliced_frame_{i:04d}.jpg"
             # os.makedirs(f"saves_sliced", exist_ok=True)
 
-            partes = np.array_split(frame, num_colunas, axis=1)
+            partes = np.array_split(frame, num_linhas, axis=1)
             for parte in partes:
-                h_partes = np.array_split(parte, num_linhas, axis=0)
+                h_partes = np.array_split(parte, num_colunas, axis=0)
                 partes = partes + h_partes
 
             partes = partes[num_colunas:]
