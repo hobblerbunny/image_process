@@ -32,13 +32,11 @@ class ReadFrameOpencv:
         if isinstance(self._read_frames, bytes):
             try:
                 cap = cv2.VideoCapture(self._read_frames)
-                print("cap")
             except:
                 raise ValueError("Not a video")
         elif isinstance(self._read_frames, str):
             try:
                 file = os.listdir(self._read_frames)
-                print("file")
             except:
                 raise ValueError("Not images")
 
@@ -52,14 +50,12 @@ class ReadFrameOpencv:
                     frames_list.append(frame)
 
                 cap.release()  # Importante liberar o recurso de captura após a leitura
-                print("there")
 
         except:
             frames_list = []
             for filename in file:
                 img = cv2.imread(os.path.join(self._read_frames, filename))
                 frames_list.append(img)
-            print("elsewhere")
 
         return frames_list
     
