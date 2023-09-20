@@ -16,25 +16,8 @@ precisa criar um csv com as landmarks CHW(chann, height, width)
 
 class ReadFrameOpencv:
     def __init__(self):
-        self._video_file = None
         self._output_folder = None
-        self._image_folder = None
-
-    @property
-    def image_folder(self):
-        return self._image_folder
-
-    @image_folder.setter
-    def image_folder(self, path):
-        self._image_folder = path
-
-    @property
-    def video_file(self):
-        return self._video_file
-
-    @video_file.setter
-    def video_file(self, path):
-        self._video_file = file
+        self._read_frames = None
 
     @property
     def output_folder(self):
@@ -44,17 +27,19 @@ class ReadFrameOpencv:
     def output_folder(self, path):
         self._output_folder = path
 
+    @read_frames.setter
+    def read_frames(self, frames):
+        self._read_frames = frames
+
+    @property
     def read_frames(self):
-        if self.video_file is None:
-            raise ValueError("Video file path is ncot set.")
-        
         try:
-            cap = cv2.VideoCapture(self.video_file)
+            cap = cv2.VideoCapture(self._read_frames)
         except:
             raise ValueError("Not a video")
 
         try:
-            file = os.listdir(self.image_folder)
+            file = os.listdir(self._read_frames)
         except:
             raise ValueError("Not images")
 
@@ -176,6 +161,5 @@ class ReadFrameOpencv:
     def landmarks(self, frames):
         for i, frame in enumerate(frames): 
             height, width, channels = self.frame.shape
-
 
         return frames
