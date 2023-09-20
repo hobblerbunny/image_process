@@ -59,8 +59,6 @@ class ReadFrameOpencv:
                 img = cv2.imread(os.path.join(self.image_folder, filename))
                 frames_list.append(img)
 
-        
-        
         return frames_list
 
     def save_frames(self, frames, all_in_one=False):
