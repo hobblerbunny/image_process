@@ -27,51 +27,56 @@ class ReadFrameOpencv:
     def output_folder(self, path):
         self._output_folder = path
 
+    @property
+    def read_frames(self):
+        if isinstance(self._read_frames, bytes):
+            try:
+                cap = cv2.VideoCapture(self._read_frames)
+                print("cap")
+            except:
+                raise ValueError("Not a video")
+        elif isinstance(self._read_frames, str):
+            try:
+                file = os.listdir(self._read_frames)
+                print("file")
+            except:
+                raise ValueError("Not images")
+
+        try:
+            if cap:
+                frames_list = []
+                while True:
+                    ret, frame = cap.read()
+                    if not ret:
+                        break
+                    frames_list.append(frame)
+
+                cap.release()  # Importante liberar o recurso de captura após a leitura
+                print("there")
+
+        except:
+            frames_list = []
+            for filename in file:
+                img = cv2.imread(os.path.join(self._read_frames, filename))
+                frames_list.append(img)
+            print("elsewhere")
+
+        return frames_list
+    
     @read_frames.setter
     def read_frames(self, frames):
         self._read_frames = frames
 
-    @property
-    def read_frames(self):
-        try:
-            cap = cv2.VideoCapture(self._read_frames)
-        except:
-            raise ValueError("Not a video")
-
-        try:
-            file = os.listdir(self._read_frames)
-        except:
-            raise ValueError("Not images")
-
-        if cap:
-            frames_list = []
-            while True:
-                ret, frame = cap.read()
-                if not ret:
-                    break
-                frames_list.append(frame)
-
-            cap.release()  # Importante liberar o recurso de captura após a leitura
-
-        elif file:
-            frames_list = []
-            for filename in file:
-                img = cv2.imread(os.path.join(self.image_folder, filename))
-                frames_list.append(img)
-
-        return frames_list
-
     def save_frames(self, frames, all_in_one=False):
-        if all_in_one:
-            if self.output_folder is None:
+        if isinstance(frames[0], np.ndarray):
+            if all_in_one:
                 raise ValueError("Output folder path is not set.")
             
             os.makedirs(f"{self.output_folder}", exist_ok=True)
 
-            for s, tuples in enumerate(frames):
-                for i, frame in enumerate(tuples):
-                    frame_filename = os.path.join(f"{self.output_folder}", f'frame_{s:04d}_{i}.jpg')
-                    cv2.imwrite(frame_filename, frame)
+            for i, frame in enumerate(frames):
+                frame_filename = os.path.join(f"{self.output_folder}", f'frame_{i:04d}.jpg')
+                cv2.imwrite(frame_filename, frame)
 
         elif isinstance(frames[0], np.ndarray):
             if self.output_folder is None:
@@ -85,10 +90,25 @@ class ReadFrameOpencv:
         
         elif isinstance(frames[0], list):
             for i, tuples in enumerate(frames):
-                slice_id = f"slice_{i:03d}.jpg"
-                caminho_arquivo = f"{tuple_id}/{slice_id}"
-                os.makedirs(f"{self.output_folder}/{caminho_arquivo}", exist_ok=True)
-                frame_filename = os.path.join(f"{self.output_folder}/{caminho_arquivo}", f'slice_{i:04d}.jpg')
+                tuple_id = f"sliced_frame_{i:04d}.jpg"
+                os.makedirs(f"{self.output_folder}", exist_ok=True)
+
+                for i, frame in enumerate(tuples):
+                        slice_id = f"slice_{i:03d}.jpg"
+                        caminho_arquivo = f"{tuple_id}/{slice_id}"
+                        os.makedirs(f"{self.output_folder}/{caminho_arquivo}", exist_ok=True)
+                        frame_filename = os.path.join(f"{self.output_folder}/{caminho_arquivo}", f'slice_{i:04d}.jpg')
+                        
+                        cv2.imwrite(frame_filename, frame)
+        
+        elif isinstance(frames[0], np.ndarray):
+            if self.output_folder is None:
+                raise ValueError("Output folder path is not set.")
+            
+            os.makedirs(f"{self.output_folder}", exist_ok=True)
+
+            for i, frame in enumerate(frames):
+                frame_filename = os.path.join(f"{self.output_folder}", f'frame_{i:04d}.jpg')
                 cv2.imwrite(frame_filename, frame)
 
     def matrix_color(self, frames, type):
@@ -134,7 +154,7 @@ class ReadFrameOpencv:
 
         return result
 
-    def slicing_frames(self, frames, num_colunas=None, num_linhas=None):
+    def slicing_frames(self, frames, num_linhas=None, num_colunas=None):
         if num_colunas is None:
             raise ("Value error: num_columns can't be none")
         elif num_linhas is None:
@@ -145,12 +165,12 @@ class ReadFrameOpencv:
             frame_id = f"sliced_frame_{i:04d}.jpg"
             # os.makedirs(f"saves_sliced", exist_ok=True)
 
-            partes = np.array_split(frame, num_linhas, axis=1)
+            partes = np.array_split(frame, num_linhas, axis=0)
             for parte in partes:
-                h_partes = np.array_split(parte, num_colunas, axis=0)
+                h_partes = np.array_split(parte, num_colunas, axis=1)
                 partes = partes + h_partes
 
-            partes = partes[num_colunas:]
+            partes = partes[num_linhas:]
             tuple_partes = (partes)
             result.append(tuple_partes)
 

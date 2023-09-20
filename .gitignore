@@ -13,3 +13,5 @@
 *estudo_cnn/tests/saved_frame_3
 
 *estudo_cnn/tests/sliced_in_half
+
+*estudo_cnn/tests/formatar_dataset/copy.py
