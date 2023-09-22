@@ -13,7 +13,14 @@ ipykernel = "^6.25.2"
 importlib = "^1.0.4"
 matplotlib = "^3.7.3"
 pandas = "^2.1.0"
+ultralytics = "^8.0.184"
+labelimg = "^1.8.6"
 
+[tool.poetry.dev-dependencies]
+poethepoet = "^0.22.1"
+
+[tool.poe.tasks]
+force-cuda11 = "pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118"
 
 [build-system]
 requires = ["poetry-core"]
