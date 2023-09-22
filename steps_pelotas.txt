@@ -1,0 +1,32 @@
+1 - personalizar nome dos frames salvos
+
+2 - passar um dict como input para as classes
+do meu landmark
+
+3 - comparar o nome no arquivo com os nomes 
+das classes classificando de acordo com o ID 
+do dict
+
+4 - colocar esses dados em um dataframe
+
+5 - salvar um csv criando os headers para cada
+coluna 
+
+logica para criar o csv com o classificador:
+
+if value than key in df column
+
+
+!!!não vou fazer isso agora
+import re
+
+# Suponha que você tenha uma variável de texto e uma palavra a ser verificada
+texto = "Este é um exemplo de texto."
+palavra_a_verificar = "exemplo"
+
+# Use re.search() para verificar se a palavra está contida no texto
+padrao = re.compile(r'\b{}\b'.format(re.escape(palavra_a_verificar)))  # Usamos \b para correspondência de palavra inteira
+if padrao.search(texto):
+    print("O texto contém a palavra:", palavra_a_verificar)
+else:
+    print("O texto não contém a palavra:", palavra_a_verificar)
