@@ -1,26 +1,25 @@
 [tool.poetry]
 name = "estudo-cnn"
 version = "0.1.0"
-description = ""
+description = "me"
 authors = ["j.senra <judson.nascimento@aperam.com>"]
+license = "me"
 readme = "README.md"
 packages = [{include = "estudo_cnn"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.11,<3.13"
 opencv-python = "^4.8.0.76"
 ipykernel = "^6.25.2"
 importlib = "^1.0.4"
-matplotlib = "^3.7.3"
-pandas = "^2.1.0"
-ultralytics = "^8.0.184"
-labelimg = "^1.8.6"
+matplotlib = "^3.8.0"
+pandas = "^2.1.1"
+numpy = "^1.26.0"
+labelImg = "^1.8.6"
+ultralytics = "^8.0.186"
 
-[tool.poetry.dev-dependencies]
-poethepoet = "^0.22.1"
-
-[tool.poe.tasks]
-force-cuda11 = "pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118"
+[tool.poetry.group.dev.dependencies]
+poethepoet = "^0.23.0"
 
 [build-system]
 requires = ["poetry-core"]
