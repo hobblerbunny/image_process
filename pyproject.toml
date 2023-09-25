@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "estudo-cnn"
+name = "estudo-convs"
 version = "0.1.0"
 description = "me"
 authors = ["j.senra <judson.nascimento@aperam.com>"]
 license = "me"
 readme = "README.md"
-packages = [{include = "estudo_cnn"}]
+packages = [{include = "estudo_convs"}]
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.13"
@@ -20,6 +20,10 @@ ultralytics = "^8.0.186"
 
 [tool.poetry.group.dev.dependencies]
 poethepoet = "^0.23.0"
+
+[tool.poe.tasks]
+force-cuda = "pip3 install torch torchvision torchaudio"
+force-image-download = "pip install simple-image-download"
 
 [build-system]
 requires = ["poetry-core"]

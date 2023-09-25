@@ -1,0 +1,13 @@
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+opencv-python = "^4.8.0.76"
+ipykernel = "^6.25.2"
+importlib = "^1.0.4"
+matplotlib = "^3.8.0"
+pandas = "^2.1.1"
+numpy = "^1.26.0"
+labelImg = "^1.8.6"
+ultralytics = "^8.0.186"
+
+[tool.poetry.group.dev.dependencies]
+poethepoet = "^0.23.0"
